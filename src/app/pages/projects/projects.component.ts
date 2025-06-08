@@ -13,17 +13,18 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
+import Swal from 'sweetalert2';
 import { ProjectsService } from 'app/services/projects/projects.service';
 import { ModalCreateProjectComponent } from '../modal-create-projects/modal-create-project/modal-create-project.component';
 import { ModalEditProjectComponent } from '../modal-edit-projects/modal-edit-project/modal-edit-project.component';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
 
-import Swal from 'sweetalert2';
+/** Definimos las claves válidas para los filtros */
+interface ProjectFilters {
+  nombre: string;
+  descripcion: string;
+}
 
-/**
- * Componente para la gestión de proyectos.
- * Permite listar, filtrar, crear, editar y eliminar proyectos.
- */
 @Component({
   selector: 'app-projects',
   standalone: true,
@@ -46,42 +47,28 @@ import Swal from 'sweetalert2';
   styleUrls: ['./projects.component.scss']
 })
 export class ProjectsComponent implements OnInit {
-  /**
-   * Columnas a mostrar en la tabla de proyectos.
-   */
-  displayedColumns: string[] = ['nombre', 'descripcion', 'acciones'];
+  /** Columnas de la tabla */
+  displayedColumns: string[] = [
+    'nombre',
+    'descripcion',
+    'administrador',
+    'usuarios',
+    'fecha_creacion',
+    'acciones'
+  ];
 
-  /**
-   * Fuente de datos para la tabla de proyectos.
-   */
   dataSource = new MatTableDataSource<any>([]);
-
-  /**
-   * Indicador de carga para mostrar un spinner mientras se cargan los datos.
-   */
   isLoading = false;
 
-  /**
-   * Referencia al paginador de la tabla.
-   */
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-
-  /**
-   * Formulario para filtrar proyectos.
-   */
   projectFilterForm!: FormGroup;
 
-  /**
-   * Filtros predeterminados para la búsqueda de proyectos.
-   */
-  projectDefaultFilter: { [key: string]: string } = {
+  /** Ahora con tipo ProjectFilters */
+  projectDefaultFilter: ProjectFilters = {
     nombre: '',
-    descripcion: '',
+    descripcion: ''
   };
 
-  /**
-   * Datos para el componente de breadcrumb.
-   */
   breadscrums = [
     {
       title: 'Gestión de proyectos',
@@ -90,13 +77,6 @@ export class ProjectsComponent implements OnInit {
     },
   ];
 
-  /**
-   * Constructor del componente.
-   * @param _formBuilder Servicio para construir formularios reactivos.
-   * @param _projectsService Servicio para gestionar proyectos.
-   * @param _dialog Servicio para abrir modales.
-   * @param _snackBar Servicio para mostrar notificaciones tipo snackbar.
-   */
   constructor(
     private readonly _formBuilder: FormBuilder,
     private readonly _projectsService: ProjectsService,
@@ -104,21 +84,15 @@ export class ProjectsComponent implements OnInit {
     private readonly _snackBar: MatSnackBar
   ) {}
 
-  /**
-   * Método de inicialización del componente.
-   * Configura el formulario de filtros y carga la lista inicial de proyectos.
-   */
   ngOnInit(): void {
     this.createProjectFilterForm();
     this.getAllProjects();
-    this.handleProjectFilterChange('nombre', 'nombre');
-    this.handleProjectFilterChange('descripcion', 'descripcion');
+    // Sólo pasamos la clave del filtro, que TS reconoce como válida
+    this.handleProjectFilterChange('nombre');
+    this.handleProjectFilterChange('descripcion');
   }
 
-  /**
-   * Crea y configura el formulario para filtrar proyectos.
-   */
-  createProjectFilterForm(): void {
+  private createProjectFilterForm(): void {
     this.projectFilterForm = this._formBuilder.group({
       nombre: [''],
       descripcion: [''],
@@ -126,24 +100,20 @@ export class ProjectsComponent implements OnInit {
   }
 
   /**
-   * Maneja los cambios en los filtros del formulario.
-   * @param controlName Nombre del control en el formulario.
-   * @param filterKey Clave del filtro en el objeto de filtros.
+   * Escucha cambios en el formulario y actualiza projectDefaultFilter
+   * controlName es keyof ProjectFilters, así TS sabe que es 'nombre' o 'descripcion'
    */
-  handleProjectFilterChange(controlName: string, filterKey: string): void {
+  private handleProjectFilterChange(controlName: keyof ProjectFilters): void {
     this.projectFilterForm.controls[controlName].valueChanges
       .pipe(debounceTime(400), distinctUntilChanged())
-      .subscribe((value) => {
-        this.projectDefaultFilter[filterKey] = value;
+      .subscribe((value: string) => {
+        // TS infiere que controlName es una clave válida de projectDefaultFilter
+        this.projectDefaultFilter[controlName] = value;
         this.getAllProjects({ ...this.projectDefaultFilter });
       });
   }
 
-  /**
-   * Obtiene la lista de proyectos desde el servicio.
-   * @param filters Filtros opcionales para la búsqueda de proyectos.
-   */
-  getAllProjects(filters?: any): void {
+  getAllProjects(filters?: Partial<ProjectFilters>): void {
     this.isLoading = true;
     this._projectsService.getAllProjects(filters).subscribe({
       next: (res) => {
@@ -158,40 +128,27 @@ export class ProjectsComponent implements OnInit {
     });
   }
 
-  /**
-   * Abre el modal para crear un nuevo proyecto.
-   */
   openModalCreateProject(): void {
     const dialogRef = this._dialog.open(ModalCreateProjectComponent, {
       width: '820px',
       disableClose: true,
     });
-
     dialogRef.afterClosed().subscribe((result) => {
       if (result) this.getAllProjects();
     });
   }
 
-  /**
-   * Abre el modal para editar un proyecto existente.
-   * @param project Proyecto a editar.
-   */
   openModalEditProject(project: any): void {
     const dialogRef = this._dialog.open(ModalEditProjectComponent, {
       width: '820px',
       disableClose: true,
       data: { project },
     });
-
     dialogRef.afterClosed().subscribe((result) => {
       if (result) this.getAllProjects();
     });
   }
 
-  /**
-   * Elimina un proyecto después de confirmar la acción.
-   * @param projectId ID del proyecto a eliminar.
-   */
   deleteProject(projectId: number): void {
     Swal.fire({
       title: '¿Estás seguro?',

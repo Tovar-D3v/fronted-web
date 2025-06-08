@@ -3,23 +3,23 @@
 <mat-dialog-content [formGroup]="formUpdateProject">
   <div class="row">
     <div class="col-md-6">
-      <mat-form-field class="w-100" appearance="outline">
+      <mat-form-field class="w-100" appearance="outline" style="margin-top: 1rem;">
         <mat-label>Nombre</mat-label>
         <input matInput formControlName="nombre" placeholder="Nombre del proyecto" />
       </mat-form-field>
     </div>
 
     <div class="col-md-6">
-      <mat-form-field class="w-100" appearance="outline">
+      <mat-form-field class="w-100" appearance="outline" style="margin-top: 1rem;">
         <mat-label>Descripción</mat-label>
-        <textarea matInput formControlName="descripcion" placeholder="Descripción del proyecto"></textarea>
+        <input matInput formControlName="descripcion" placeholder="Descripción del proyecto" />
       </mat-form-field>
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-6">
-      <mat-form-field class="w-100" appearance="outline">
+      <mat-form-field class="w-100" appearance="outline" style="margin-top: 1rem;">
         <mat-label>Administrador</mat-label>
         <mat-select formControlName="administrador_id">
           <mat-option *ngFor="let admin of administratorsValues" [value]="admin.id">
@@ -30,7 +30,7 @@
     </div>
 
     <div class="col-md-6">
-      <mat-form-field class="w-100" appearance="outline">
+      <mat-form-field class="w-100" appearance="outline" style="margin-top: 1rem;">
         <mat-label>Usuarios asociados</mat-label>
         <mat-select formControlName="userIds" multiple>
           <mat-option *ngFor="let user of usersValues" [value]="user.id">

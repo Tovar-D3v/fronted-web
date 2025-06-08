@@ -2,22 +2,14 @@
   <div class="container-fluid">
     <div class="navbar-header">
       <a href="#" onClick="return false;" class="navbar-toggle collapsed"
-        (click)="isNavbarCollapsed = !isNavbarCollapsed" aria-expanded="false"></a>
+        aria-expanded="false"></a>
       <a href="#" onClick="return false;" class="bars" (click)="mobileMenuSidebarOpen($event,'overlay-open')"></a>
       <a class="navbar-brand" routerLink="dashboard/main">
-        <!-- <img src="assets/images/perfil-ocgn.jpg" width="30" height="30" alt="" /> -->
-        <span class="logo-name"></span>
+        Gestor de Proyectos
       </a>
     </div>
     <div class="collapse navbar-collapse" [ngClass]="isNavbarCollapsed ? '' : 'show'">
-      <ul class="pull-left collapse-menu-icon">
-        <li>
-          <button mat-icon-button (click)="callSidemenuCollapse()" class="sidemenu-collapse nav-notification-icons"> <i
-              class="material-icons-outlined icon-color">
-              menu
-            </i></button>
-        </li>
-      </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <!-- Full Screen Button -->
         <li class="fullscreen">

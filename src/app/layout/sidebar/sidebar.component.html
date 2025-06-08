@@ -1,43 +1,63 @@
-<div>
-  <!-- Left Sidebar -->
-  <aside id="leftsidebar" class="sidebar" (mouseenter)="mouseHover()" (mouseleave)="mouseOut()">
-    <!-- Menu -->
-    <div class="menu">
-      <ng-scrollbar [style.height]="listMaxHeight + 'px'" visibility="hover">
-        <ul class="list">
-          <li class="sidebar-user-panel">
-            <div class="user-panel">
-              <div class=" image">
-                <img src="imagen de preferencia" class="img-circle user-img-circle" alt="User Image" />
-              </div>
-            </div>
-            <div class="profile-usertitle">
-              <div class="sidebar-userpic-name">{{ userLogged }}</div>
-            </div>
-            <br>
-          </li>
-          <!-- Top Most level menu -->
-          @for (sidebarItem of sidebarItems; track sidebarItem) {
-          <li [routerLinkActive]="sidebarItem.submenu.length !== 0 ? 'active' : 'active-top'">
-            @if (sidebarItem.groupTitle === true) {
-            <div class="header" [innerHTML]="sanitizeHtml(sidebarItem.title)"></div>
-            }
-            @if (!sidebarItem.groupTitle;) {
-            <a [routerLink]="sidebarItem.class === '' ? [sidebarItem.path] : null" [ngClass]="[sidebarItem.class]"
-              (click)="callToggleMenu($event, sidebarItem.submenu.length)" class="menu-top">
-              <i [ngClass]="[sidebarItem.iconType]">{{sidebarItem.icon}}</i>
-              <span class="hide-menu" [innerHTML]="sanitizeHtml(sidebarItem.title)"></span>
-              @if (sidebarItem.badge !== '' ) {
-              <span [ngClass]="[sidebarItem.badgeClass]" [innerHTML]="sanitizeHtml(sidebarItem.badge)"></span>
-              }
-            </a>
-            }   
-          </li>
-          }
-        </ul>
-      </ng-scrollbar>
+<aside
+  id="leftsidebar"
+  class="sidebar"
+  [ngClass]="{ collapsed: isCollapsed }"
+  (mouseenter)="mouseHover()"
+  (mouseleave)="mouseOut()"
+>
+  <div class="sidebar-header">
+    <div class="user-panel" *ngIf="!isCollapsed">
+      <span class="username">{{ userLogged }}</span>
     </div>
-    <!-- #Menu -->
-  </aside>
-  <!-- #END# Left Sidebar -->
-</div>
+  </div>
+
+  <div class="menu-scroll">
+    <ul class="menu-list" [style.maxHeight.px]="listMaxHeight">
+      <li
+        *ngFor="let item of sidebarItems; let i = index"
+        [ngClass]="{
+          active: submenuOpen[i] || item.submenu.length === 0
+        }"
+      >
+
+
+        <a
+          *ngIf="!item.groupTitle"
+          class="menu-link"
+          [routerLink]="item.path"
+          (click)="callToggleMenu(i, item.submenu.length)"
+        >
+          <i class="{{ item.iconType }}">{{ item.icon }}</i>
+          <span class="item-text" [innerHTML]="sanitizeHtml(item.title)">
+          </span>
+          <span
+            *ngIf="item.badge"
+            class="badge"
+            [ngClass]="item.badgeClass"
+            [innerHTML]="sanitizeHtml(item.badge)"
+          ></span>
+          <i
+            *ngIf="item.submenu.length > 0"
+            class="material-icons expand-icon"
+            [class.expanded]="submenuOpen[i]"
+          >
+            expand_more
+          </i>
+        </a>
+
+        <ul
+          *ngIf="item.submenu.length > 0 && submenuOpen[i]"
+          class="submenu"
+        >
+          <li *ngFor="let sub of item.submenu">
+            <a
+              class="menu-link"
+              [routerLink]="sub.path"
+              [innerHTML]="sanitizeHtml(sub.title)"
+            ></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</aside>
