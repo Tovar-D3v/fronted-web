@@ -2,11 +2,11 @@
 <section class="content">
     <div class="content-block">
         @for (breadscrum of breadscrums; track breadscrums) {
-            <div class="block-header">
-                <!-- breadcrumb -->
-                <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.item" [active_item]="breadscrum.active">
-                </app-breadcrumb>
-            </div>
+        <div class="block-header">
+            <!-- breadcrumb -->
+            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.item" [active_item]="breadscrum.active">
+            </app-breadcrumb>
+        </div>
         }
         <div class="row-clearfix">
             <div class="card-search">
@@ -31,7 +31,7 @@
                         <!-- Encabezado de la tabla de usuarios -->
                         <div class="materialTableHeader">
                             <div class="left">
-                                <ul class="header-button-left- ms-0">
+                                <ul class="header-button-left- ms-0" style="margin-bottom: 0;">
                                     <li class="tbl-title">
                                         <h2>Lista usuarios</h2>
                                     </li>
@@ -41,7 +41,8 @@
                                 <ul class="tbl-export-btn">
                                     <li>
                                         <!-- Botón para crear un nuevo usuario -->
-                                        <button mat-flat-button="bg-cyan" (click)="openModalCreateUser()">Crear usuario</button>
+                                        <button mat-flat-button="bg-cyan" (click)="openModalCreateUser()">Crear
+                                            usuario</button>
                                     </li>
                                 </ul>
                             </div>
@@ -50,7 +51,8 @@
                         <!-- Tabla de usuarios -->
                         <div class="table-responsive">
                             <table mat-table [dataSource]="dataSource" class="w-100">
-                                <mat-spinner *ngIf="isLoading" class="loading-spinner"></mat-spinner> <!-- Indicador de carga -->
+                                <mat-spinner *ngIf="isLoading" class="loading-spinner"></mat-spinner>
+                                <!-- Indicador de carga -->
                                 <!-- Columnas de la tabla -->
                                 <ng-container matColumnDef="id">
                                     <th mat-header-cell *matHeaderCellDef width="25%"> id </th>
@@ -71,21 +73,26 @@
                                 <ng-container matColumnDef="action">
                                     <th mat-header-cell *matHeaderCellDef width="10%"> Acciones </th>
                                     <td mat-cell *matCellDef="let element">
-                                        <!-- Botón para editar un usuario -->
-                                        <button mat-icon-button matTooltip="Editar usuario" (click)="openModalUpdateUsers(element)">
-                                            <mat-icon> edit </mat-icon>
-                                        </button>
-                                        <!-- Botón para eliminar un usuario -->
-                                        <button mat-icon-button matTooltip="Eliminar usuario" (click)="deleteUser(element.id)">
-                                            <mat-icon> delete </mat-icon>
-                                        </button>
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <!-- Botón para editar un usuario -->
+                                            <button mat-icon-button matTooltip="Editar usuario"
+                                                (click)="openModalUpdateUsers(element)">
+                                                <mat-icon> edit </mat-icon>
+                                            </button>
+                                            <!-- Botón para eliminar un usuario -->
+                                            <button mat-icon-button matTooltip="Eliminar usuario"
+                                                (click)="deleteUser(element.id)" style="color: #ba1a1a;">
+                                                <mat-icon> delete </mat-icon>
+                                            </button>
+                                        </div>
                                     </td>
                                 </ng-container>
                                 <!-- Filas de la tabla -->
                                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                             </table>
-                            <div *ngIf="dataSource && dataSource.data && dataSource.data.length === 0" class="no-data-message">
+                            <div *ngIf="dataSource && dataSource.data && dataSource.data.length === 0"
+                                class="no-data-message">
                                 No hay información disponible.
                             </div>
 

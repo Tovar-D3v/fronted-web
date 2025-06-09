@@ -8,7 +8,7 @@
   background-color: transparent;
   font-size: 15px;
   align-items: center;
-  margin: 3rem 0 3rem;
+  margin: 1rem 0 2rem;
   padding: 0px;
   color: #555;
 
@@ -56,31 +56,16 @@
     font-weight: 500;
     color: #444444;
     margin-bottom: 0px;
-    &:after {
-      content: "\f105";
-      font-family: "Font Awesome 5 Free";
-      font-size: 18px;
-      font-weight: 900;
-      padding: 0px 5px;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
     i {
       padding: 0px 5px;
-      &:before {
-        color: #717883;
-        font-size: 20px;
-      }
     }
   }
   .breadcrumb-item + .breadcrumb-item {
     padding-left: 5px;
-    &:before {
-      content: "\f105";
-      font-family: "Font Awesome 5 Free";
-      font-size: 14px;
-      display: block;
-      font-weight: 900;
-      padding-right: 0.5rem;
-    }
   }
 }
 

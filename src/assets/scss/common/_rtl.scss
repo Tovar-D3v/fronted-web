@@ -70,17 +70,12 @@
     .page-title {
       border-right: none;
       padding-right: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       &:after {
         display: none;
-      }
-
-      &:before {
-        content: "\f104";
-        font-family: "Font Awesome 5 Free";
-        font-size: 18px;
-        font-weight: 900;
-        padding: 0px 5px;
       }
     }
 
@@ -93,18 +88,9 @@
     .breadcrumb-item+.breadcrumb-item {
       padding-right: 5px;
       padding-left: unset;
-
-      &:after {
-        content: "\f104";
-        font-family: "Font Awesome 5 Free";
-        font-size: 14px;
-        font-weight: 900;
-        padding-left: 0.5rem;
-      }
-
-      &:before {
-        display: none;
-      }
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 

@@ -5,11 +5,6 @@
   (mouseenter)="mouseHover()"
   (mouseleave)="mouseOut()"
 >
-  <div class="sidebar-header">
-    <div class="user-panel" *ngIf="!isCollapsed">
-      <span class="username">{{ userLogged }}</span>
-    </div>
-  </div>
 
   <div class="menu-scroll">
     <ul class="menu-list" [style.maxHeight.px]="listMaxHeight">
@@ -27,7 +22,7 @@
           [routerLink]="item.path"
           (click)="callToggleMenu(i, item.submenu.length)"
         >
-          <i class="{{ item.iconType }}">{{ item.icon }}</i>
+          <i class="{{ item.iconType }}" style="margin-right: .5rem;">{{ item.icon }}</i>
           <span class="item-text" [innerHTML]="sanitizeHtml(item.title)">
           </span>
           <span
@@ -45,18 +40,6 @@
           </i>
         </a>
 
-        <ul
-          *ngIf="item.submenu.length > 0 && submenuOpen[i]"
-          class="submenu"
-        >
-          <li *ngFor="let sub of item.submenu">
-            <a
-              class="menu-link"
-              [routerLink]="sub.path"
-              [innerHTML]="sanitizeHtml(sub.title)"
-            ></a>
-          </li>
-        </ul>
       </li>
     </ul>
   </div>

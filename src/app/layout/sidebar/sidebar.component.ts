@@ -6,10 +6,10 @@ import { ROUTES, RouteInfo } from './sidebar.metadata';
 
 @Component({
   selector: 'app-sidebar',
-  standalone: true,                // ← lo hacemos standalone
+  standalone: true,
   imports: [
-    CommonModule,                   // para ngIf, ngFor, ngClass…
-    RouterModule                    // para routerLink, routerLinkActive…
+    CommonModule,
+    RouterModule
   ],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
@@ -19,7 +19,6 @@ export class SidebarComponent {
   public isCollapsed = false;
   public listMaxHeight = 0;
   public submenuOpen: boolean[] = [];
-  public userLogged = 'Usuario Ejemplo';
 
   constructor(private sanitizer: DomSanitizer) {}
 
